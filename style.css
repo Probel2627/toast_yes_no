@@ -1,0 +1,151 @@
+body {
+    font-family: sans-serif;
+    background-color: #f0e6d2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    overflow: hidden;
+}
+
+.container {
+    text-align: center;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    max-width: 90%;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 30px;
+}
+
+/* Обертка для позиционирования тостера и тоста */
+.toaster-wrapper {
+    position: relative;
+    width: 300px; /* Ширина вашего PNG тостера */
+    height: 300px; /* Высота вашего PNG тостера + место для выпрыгивания */
+    margin: 50px auto;
+    /* Чтобы видеть, где находится тост относительно тостера во время отладки */
+    /* border: 1px dashed gray; */
+}
+
+/* Стили для тостера с использованием PNG-изображения */
+.toaster {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px; /* Ширина вашего PNG изображения */
+    height: 200px; /* Высота вашего PNG изображения */
+    background-image: url('images/toaster.png'); /* Путь к вашему изображению тостера */
+    background-size: contain; /* Растягиваем изображение на весь элемент */
+    background-repeat: no-repeat;
+    background-position: center bottom; /* Центрируем и прижимаем к низу */
+    z-index: 1; /* Тостер поверх тоста, когда он внутри */
+    pointer-events: none; /* Чтобы клики проходили сквозь него, если он накладывается на тост */
+}
+
+/* Тост */
+.toast-container {
+    position: absolute;
+    /* Изначальное положение тоста над слотом тостера. */
+    /* Вам нужно будет настроить эти значения (top и left) */
+    /* чтобы тост выглядел так, будто он находится над слотами вашего PNG */
+    top: -100px; /* Например, чуть выше слотов тостера */
+    left: 53%;
+    transform: translateX(-50%);
+    width: 100px; /* Ширина тоста, чтобы он влезал в слоты */
+    height: 100px; /* Высота тоста */
+    perspective: 1000px;
+    transition: all 0.3s ease-out; /* Плавное движение для dipIn/popOut */
+    z-index: 0; /* Тост под тостером изначально */
+}
+
+.toast {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    /* transition: transform 1s; */ /* Управляется JavaScript'ом */
+}
+
+.toast-side {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+}
+
+.toast-side img {
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.back {
+    transform: rotateX(180deg);
+}
+
+/* Анимация опускания тоста в тостер */
+/* Отрегулируйте 'top' в 100%, чтобы тост исчезал внутри слота вашего PNG */
+@keyframes dipIn {
+    0% { top: -100px; transform: translateX(-50%); opacity: 1; }
+    100% { top: 50px; transform: translateX(-50%); opacity: 0; } /* Тост полностью исчезает внутри */
+}
+
+/* Анимация выпрыгивания тоста из тостера */
+/* Отрегулируйте 'top' в 0% и 50% */
+@keyframes popOut {
+    0% { top: 50px; transform: translateX(-50%); opacity: 0; } /* Стартуем изнутри тостера */
+    50% { top: -120px; transform: translateX(-50%) scale(1.1); opacity: 1; } /* Вылетает высоко над тостером */
+    100% { top: -100px; transform: translateX(-50%) scale(1); opacity: 1; } /* Возвращается в исходное положение над слотом */
+}
+
+
+/* Анимация вращения тоста в воздухе */
+/* Эта анимация теперь не нужна, т.к. управляем transform напрямую в JS */
+/* @keyframes flipRotate {
+    0% { transform: rotateY(0deg); }
+    100% { transform: rotateY(1800deg); }
+} */
+
+/* Классы, которые мы будем добавлять JavaScript'ом */
+.toast-dip-in {
+    animation: dipIn 0.8s ease-in forwards;
+}
+
+.toast-pop-out {
+    animation: popOut 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+}
+
+/* Этот класс теперь не нужен, т.к. transform задается напрямую */
+/* .toast-flipping {
+    animation: flipRotate 1s ease-out forwards;
+} */
+
+
+button {
+    padding: 12px 25px;
+    font-size: 1.3em;
+    cursor: pointer;
+    border-radius: 8px;
+    border: none;
+    background-color: #ff9a2b;
+    color: white;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+button:hover {
+    background-color: #ff8c00;
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(0);
+}
